@@ -43,7 +43,6 @@ class _MyHomePageState extends State<MyHomePage> {
       if (option.setState == null) return;
       final optionStates = option.setState!.keys.toList();
       final optionValues = option.setState!.values.toList();
-
       for (var i = 0; i < option.setState!.length; i++) {
         if (optionValues[i] == true) {
           choiceState.add(optionStates[i]);
@@ -74,7 +73,7 @@ class _MyHomePageState extends State<MyHomePage> {
             file: 'assets/json/narrativa_1.json',
           ),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
+            if (snapshot.hasData) {
               return narrativeWidget();
             }
             return const Center(child: CircularProgressIndicator());
@@ -119,10 +118,8 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Expanded(
           child: Container(
-            // width: 400, //MediaQuery.of(context).size.width,
             margin: const EdgeInsets.only(right: 12.0),
             padding: const EdgeInsets.fromLTRB(12.0, 0, 12.0, 12.0),
-
             child: ClipPath(
               clipper: NotebookClipper(),
               child: CustomPaint(
@@ -158,6 +155,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget choicesWidget() {
+    final adventureOptions = narrativeNodes.narrative[nextTextNode].options;
+
     return Container(
       padding: const EdgeInsets.only(top: 15.0),
       margin: const EdgeInsets.only(top: 15.0),
@@ -165,27 +164,20 @@ class _MyHomePageState extends State<MyHomePage> {
         primary: false,
         physics: null,
         shrinkWrap: true,
-        children: choicesButtons(),
+        children: adventureOptions.map(
+          (option) {
+            final requiredStateKeys = option.requiredState?.keys.toList() ?? [];
+            final requiredStateExists =
+                requiredStateKeys.every((state) => choiceState.contains(state));
+
+            if (option.requiredState == null || requiredStateExists) {
+              return choiceButton(context, option);
+            }
+            return Container();
+          },
+        ).toList(),
       ),
     );
-  }
-
-  choicesButtons() {
-    var adventureOptions =
-        narrativeNodes.narrative[nextTextNode].options; //next value
-
-    return adventureOptions.map(
-      (option) {
-        final requiredStateKeys = option.requiredState?.keys.toList() ?? [];
-        final requiredStateExists =
-            requiredStateKeys.every((state) => choiceState.contains(state));
-
-        if (option.requiredState == null || requiredStateExists) {
-          return choiceButton(context, option);
-        }
-        return Container();
-      },
-    ).toList();
   }
 
   Widget choiceButton(context, Option option) {

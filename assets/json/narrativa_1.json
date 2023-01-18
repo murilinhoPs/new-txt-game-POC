@@ -2,7 +2,7 @@
     "adventure": [
         {
             "id": 1,
-            "title": "Você acorda na sua barraca e vê um 1n fantasma com uma jarra na mão te encarando. \nO que você faz?",
+            "title": "Você acorda na sua barraca e vê um fantasma com uma jarra na mão te encarando. \nO que você faz?",
             "options": [
                 {
                     "index": 0,

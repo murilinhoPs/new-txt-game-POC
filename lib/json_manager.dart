@@ -13,12 +13,13 @@ class AdventureJson {
     return await rootBundle.loadString(json);
   }
 
-  static Future<void> loadNarrative({required String file}) async {
+  static Future<AllNarrativeNodesList> loadNarrative(
+      {required String file}) async {
     final jsonProduct = await _loadJson(file);
     final jsonResponse = json.decode(jsonProduct);
 
     narrativeNodes = AllNarrativeNodesList.fromJson(jsonResponse);
 
-    // return narrativeNodes;
+    return narrativeNodes;
   }
 }
