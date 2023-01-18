@@ -77,14 +77,14 @@ class Option {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    data['index'] = this.index;
-    data['text'] = this.text;
-    data['nextText'] = this.nextNode;
-    if (this.setState != null) {
-      data['setState'] = this.setState;
+    data['index'] = index;
+    data['text'] = text;
+    data['nextText'] = nextNode;
+    if (setState != null) {
+      data['setState'] = setState;
     }
-    if (this.requiredState != null) {
-      data['requiredState'] = this.requiredState;
+    if (requiredState != null) {
+      data['requiredState'] = requiredState;
     }
     return data;
   }

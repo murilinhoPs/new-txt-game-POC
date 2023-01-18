@@ -47,13 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
       for (var i = 0; i < option.setState!.length; i++) {
         if (optionValues[i] == true) {
           choiceState.add(optionStates[i]);
-          print('true: $choiceState');
           return;
         }
-
         if (choiceState.isEmpty) return;
         choiceState.removeWhere((state) => state == optionStates[i]);
-        print('false: $choiceState');
       }
     });
   }
@@ -80,7 +77,6 @@ class _MyHomePageState extends State<MyHomePage> {
             if (snapshot.connectionState == ConnectionState.done) {
               return narrativeWidget();
             }
-
             return const Center(child: CircularProgressIndicator());
           }),
     );
@@ -93,7 +89,7 @@ class _MyHomePageState extends State<MyHomePage> {
       color: Colors.grey[700],
       child: Text(
         'currentState: $choiceState',
-        style: TextStyle(color: Colors.white),
+        style: const TextStyle(color: Colors.white),
       ),
     );
   }

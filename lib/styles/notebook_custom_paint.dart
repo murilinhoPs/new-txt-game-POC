@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 class NotebookPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final paintGrey = Paint()..color = Color.fromARGB(255, 100, 100, 100);
+    final paintGrey = Paint()..color = const Color.fromARGB(255, 100, 100, 100);
     var rrectGrey = RRect.fromLTRBR(
       10,
       0,
       size.width + 8,
       size.height + 100,
-      Radius.circular(8.0),
+      const Radius.circular(8.0),
     );
 
     canvas.drawRRect(rrectGrey, paintGrey);
@@ -20,13 +20,13 @@ class NotebookPainter extends CustomPainter {
       0,
       size.width,
       size.height + 100,
-      Radius.circular(8.0),
+      const Radius.circular(8.0),
     );
 
     canvas.drawRRect(rrectWhite, paintWhite);
 
     final paintHorizontalLines = Paint()
-      ..color = Color.fromARGB(120, 144, 202, 249)
+      ..color = const Color.fromARGB(120, 144, 202, 249)
       ..strokeWidth = 1.0;
 
     for (double i = .1; i <= .9; i += 0.1) {
@@ -35,7 +35,7 @@ class NotebookPainter extends CustomPainter {
     }
 
     final paintPink = Paint()
-      ..color = Color.fromRGBO(100, 160, 255, 0.5)
+      ..color = const Color.fromRGBO(100, 160, 255, 0.5)
       ..strokeWidth = 2.5;
     canvas.drawLine(Offset(size.width * .93, 0),
         Offset(size.width * .93, size.height + 100), paintPink);
