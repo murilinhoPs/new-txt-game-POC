@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'json_manager.dart';
 import 'models.dart';
-import 'styles/notebook_custom_clipper.dart';
-import 'styles/notebook_custom_paint.dart';
+import 'styles/styles.dart';
+
+const debug = true;
 
 void main() {
   runApp(const MyApp());
@@ -33,12 +36,31 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late AllNarrativeNodesList narrativeNodes;
+
   List<String> choiceState = [];
-  int nextTextNode = 0;
+  int currentTextNode = 0;
+  int savedNodeIndex = 0;
+
+  bool get canSave => narrativeNodes.narrative[currentTextNode].save ?? false;
+
+  void saveGame() {
+    if (!canSave) return;
+
+    final saveIndex = narrativeNodes.narrative[currentTextNode].id;
+    savedNodeIndex = saveIndex - 1;
+  }
 
   void setNextTextNode(Option option) {
+    if (option.nextNode == -1) {
+      setState(() {
+        currentTextNode = savedNodeIndex;
+      });
+      return;
+    }
+
     setState(() {
-      nextTextNode = option.nextNode - 1;
+      currentTextNode = option.nextNode - 1;
 
       if (option.setState == null) return;
       final optionStates = option.setState!.keys.toList();
@@ -54,9 +76,30 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void removeOptionNode(Option option) {
+    final remove = option.removeParams;
+    if (remove == null) return;
+
+    final index = remove.id - 1;
+    final nodeOptions = narrativeNodes.narrative[index].options;
+    nodeOptions.removeWhere((option) => option.index == remove.optionIndex);
+
+    setState(() {
+      narrativeNodes.narrative[remove.id - 1].options = nodeOptions;
+    });
+  }
+
+  void onChoiceSubmitted(Option option) {
+    saveGame();
+    setNextTextNode(option);
+    removeOptionNode(option);
+  }
+
   @override
   void initState() {
-    AdventureJson.loadNarrative(file: 'assets/json/narrativa_1.json');
+    AdventureJson.loadNarrative(file: 'assets/json/narrativa_1.json').then(
+      (value) => narrativeNodes = value,
+    );
     super.initState();
   }
 
@@ -64,9 +107,15 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 157, 145, 127),
-      bottomNavigationBar: debugState(),
+      bottomNavigationBar: debug ? debugState() : null,
       appBar: AppBar(
         title: Text(widget.title),
+        leading: debug
+            ? IconButton(
+                onPressed: debugNarrativeBottomSheet,
+                icon: const Icon(Icons.info),
+              )
+            : null,
       ),
       body: FutureBuilder(
           future: AdventureJson.loadNarrative(
@@ -79,6 +128,49 @@ class _MyHomePageState extends State<MyHomePage> {
             return const Center(child: CircularProgressIndicator());
           }),
     );
+  }
+
+  void debugNarrativeBottomSheet() {
+    final narrative = narrativeNodes.narrative
+        .map(
+          (e) => Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 12.0,
+              horizontal: 4.0,
+            ),
+            child: SelectableText(
+              json.encode(
+                e.toJson(),
+              ),
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        )
+        .toList();
+
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            color: Colors.grey[700],
+            child: SingleChildScrollView(
+                child: Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(12.0),
+                  padding: const EdgeInsets.all(16.0),
+                  color: Colors.blueGrey[800],
+                  child: Text(
+                    json.encode(narrativeNodes.narrative[currentTextNode]),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                ...narrative,
+              ],
+            )),
+          );
+        });
   }
 
   Widget debugState() {
@@ -136,7 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         padding:
                             const EdgeInsets.only(left: 25, top: 25, right: 25),
                         child: SelectableText(
-                          narrativeNodes.narrative[nextTextNode].title,
+                          narrativeNodes.narrative[currentTextNode].title,
                           style: const TextStyle(
                             fontSize: 22,
                           ),
@@ -155,7 +247,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget choicesWidget() {
-    final adventureOptions = narrativeNodes.narrative[nextTextNode].options;
+    final adventureOptions = narrativeNodes.narrative[currentTextNode].options;
 
     return Container(
       padding: const EdgeInsets.only(top: 15.0),
@@ -214,7 +306,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        onPressed: () => setNextTextNode(option),
+        onPressed: () => onChoiceSubmitted(option),
       ),
     );
   }

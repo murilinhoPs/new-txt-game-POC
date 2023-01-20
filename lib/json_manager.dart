@@ -4,8 +4,6 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'models.dart';
 
-late AllNarrativeNodesList narrativeNodes;
-
 class AdventureJson {
   final String jsonKey = 'gameHistory';
 
@@ -18,8 +16,8 @@ class AdventureJson {
     final jsonProduct = await _loadJson(file);
     final jsonResponse = json.decode(jsonProduct);
 
-    narrativeNodes = AllNarrativeNodesList.fromJson(jsonResponse);
+    final allNarrativeNodes = AllNarrativeNodesList.fromJson(jsonResponse);
 
-    return narrativeNodes;
+    return allNarrativeNodes;
   }
 }
