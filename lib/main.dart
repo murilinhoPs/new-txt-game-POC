@@ -1,9 +1,10 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 
 import 'json_manager.dart';
-import 'models.dart';
+import 'models/models.dart';
 import 'styles/styles.dart';
 
 const debug = true;
@@ -37,10 +38,12 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late AllNarrativeNodesList narrativeNodes;
+  late WithdrawLines withdrawLines;
 
   List<String> choiceState = [];
   int currentTextNode = 0;
   int savedNodeIndex = 0;
+  bool showStorytellerLines = false;
 
   bool get canSave => narrativeNodes.narrative[currentTextNode].save ?? false;
 
@@ -55,6 +58,7 @@ class _MyHomePageState extends State<MyHomePage> {
     if (option.nextNode == -1) {
       setState(() {
         currentTextNode = savedNodeIndex;
+        showStorytellerLines = true;
       });
       return;
     }
@@ -67,10 +71,12 @@ class _MyHomePageState extends State<MyHomePage> {
       final optionValues = option.setState!.values.toList();
       for (var i = 0; i < option.setState!.length; i++) {
         if (optionValues[i] == true) {
+          if (choiceState.contains(optionStates[i])) return;
+
           choiceState.add(optionStates[i]);
           return;
         }
-        if (choiceState.isEmpty) return;
+
         choiceState.removeWhere((state) => state == optionStates[i]);
       }
     });
@@ -95,11 +101,21 @@ class _MyHomePageState extends State<MyHomePage> {
     removeOptionNode(option);
   }
 
+  void onTryAgainSubmitted() => setState(() => showStorytellerLines = false);
+
+  void initialize() async {
+    narrativeNodes = await JsonManager.loadNarrative(
+      file: 'assets/json/narrativa_1.json',
+    );
+
+    withdrawLines = await JsonManager.loadWithdrawLines(
+      file: 'assets/json/storyteller/withdraw_lines.json',
+    );
+  }
+
   @override
   void initState() {
-    AdventureJson.loadNarrative(file: 'assets/json/narrativa_1.json').then(
-      (value) => narrativeNodes = value,
-    );
+    initialize();
     super.initState();
   }
 
@@ -118,7 +134,7 @@ class _MyHomePageState extends State<MyHomePage> {
             : null,
       ),
       body: FutureBuilder(
-          future: AdventureJson.loadNarrative(
+          future: JsonManager.loadNarrative(
             file: 'assets/json/narrativa_1.json',
           ),
           builder: (context, snapshot) {
@@ -186,6 +202,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget narrativeWidget() {
+    final randomLine = Random().nextInt(
+      withdrawLines.lines.length,
+    );
+
     return Column(
       children: [
         Padding(
@@ -228,13 +248,17 @@ class _MyHomePageState extends State<MyHomePage> {
                         padding:
                             const EdgeInsets.only(left: 25, top: 25, right: 25),
                         child: SelectableText(
-                          narrativeNodes.narrative[currentTextNode].title,
+                          !showStorytellerLines
+                              ? narrativeNodes.narrative[currentTextNode].title
+                              : withdrawLines.lines[randomLine],
                           style: const TextStyle(
                             fontSize: 22,
                           ),
                         ),
                       ),
-                      choicesWidget(),
+                      !showStorytellerLines
+                          ? choicesWidget()
+                          : tryAgainChoices(),
                     ],
                   ),
                 ),
@@ -263,7 +287,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 requiredStateKeys.every((state) => choiceState.contains(state));
 
             if (option.requiredState == null || requiredStateExists) {
-              return choiceButton(context, option);
+              return choiceButton(
+                onSubmmit: () => onChoiceSubmitted(option),
+                optionText: option.text,
+              );
             }
             return Container();
           },
@@ -272,7 +299,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget choiceButton(context, Option option) {
+  Widget choiceButton({
+    required VoidCallback onSubmmit,
+    required String optionText,
+  }) {
     return Container(
       decoration: const BoxDecoration(
         border: Border(
@@ -283,6 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
         style: TextButton.styleFrom(
           padding: const EdgeInsets.only(bottom: 20.0, top: 12.0),
         ),
+        onPressed: onSubmmit,
         child: Container(
           padding: const EdgeInsets.all(8.0),
           margin: const EdgeInsets.only(top: 4.0),
@@ -297,7 +328,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
               const SizedBox(width: 12.0),
               Text(
-                option.text,
+                optionText,
                 style: TextStyle(
                   color: Colors.grey[900]!,
                   fontSize: 16,
@@ -306,7 +337,17 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        onPressed: () => onChoiceSubmitted(option),
+      ),
+    );
+  }
+
+  Widget tryAgainChoices() {
+    return Container(
+      padding: const EdgeInsets.only(top: 15.0),
+      margin: const EdgeInsets.only(top: 15.0),
+      child: choiceButton(
+        onSubmmit: onTryAgainSubmitted,
+        optionText: 'Vou tentar de novo',
       ),
     );
   }
