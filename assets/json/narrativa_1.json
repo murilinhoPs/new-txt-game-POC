@@ -2,6 +2,8 @@
     "adventure": [
         {
             "id": 1,
+            "nodeName": "Intro_1",
+            "save": true,
             "title": "Você acorda na sua barraca e vê um fantasma com uma jarra na mão te encarando. \nO que você faz?",
             "options": [
                 {
@@ -34,6 +36,8 @@
         },
         {
             "id": 2,
+            "nodeName": "Intro_2",
+            "save": false,
             "title": "Você saiu tão apressado que esqueceu o mapa para se localizar na floresta. Nessa hora passa um estranho te oferecendo um mapa.",
             "options": [
                 {
@@ -48,8 +52,8 @@
                     "index": 1,
                     "text": "Pega o mapa, mas sai correndo.",
                     "setState": {
-                        "jar": false,
-                        "mapa": true
+                        "mapa": true,
+                        "jar": false
                     },
                     "nextText": 3
                 },
@@ -65,6 +69,7 @@
         },
         {
             "id": 3,
+            "nodeName": "Intro_3",
             "title": "Pra sair da floresta, vc acha o caminho pelo mapa. Chegando na saída vc vê uma pessoa entrando na floresta e cumprimenta ela",
             "options": [
                 {
@@ -87,6 +92,7 @@
         },
         {
             "id": 4,
+            "nodeName": "Intro_4",
             "title": "Você acorda do sonho.",
             "options": [
                 {
@@ -101,10 +107,113 @@
                 },
                 {
                     "index": 2,
-                    "text": "Gostou do mapa?",
+                    "text": "???",
+                    "nextText": -1
+                },
+                {
+                    "index": 3,
+                    "text": "Gostou do mapa? Voltar a dormir para sonhar dnv",
                     "requiredState": {
                         "mapa": true
                     },
+                    "nextText": 5
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "nodeName": "Dream_1",
+            "save": true,
+            "title": "Você acorda do sonho.",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Andar pela trilha sem rumo",
+                    "nextText": 6
+                },
+                {
+                    "index": 1,
+                    "text": "Andar pela trilha olhando o mapa",
+                    "nextText": 9
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "nodeName": "Dream_2.1",
+            "save": false,
+            "title": "Você tem certeza?? Andar sem rumo?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Sim",
+                    "nextText": 7
+                },
+                {
+                    "index": 1,
+                    "text": "É... melhor não. Olhar o mapa",
+                    "nextText": 9
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "nodeName": "Dream_2.2",
+            "title": "Então ta! Você continua andando pra qual direção?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "leste",
+                    "nextText": 8
+                },
+                {
+                    "index": 1,
+                    "text": "oeste",
+                    "nextText": 8
+                },
+                {
+                    "index": 2,
+                    "text": "Escolho no MAPA um caminho para o posto de gasolina",
+                    "nextText": 9
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "nodeName": "Dream_2.3",
+            "title": "Então ta! Você continua andando pra qual direção?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "leste",
+                    "nextText": -1
+                },
+                {
+                    "index": 1,
+                    "text": "oeste",
+                    "nextText": -1,
+                    "remove": {
+                        "nodeName": "Dream_2.2",
+                        "id": 7,
+                        "optionIndex": 1
+                    }
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "nodeName": "Dream_3",
+            "save": false,
+            "title": "Você chega no posto ipiranga! Parabéns, vc ta vivo ainda!",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Olhar a lojinha",
+                    "nextText": 4
+                },
+                {
+                    "index": 1,
+                    "text": "Falar com a tartaruga frentista",
                     "nextText": 1
                 }
             ]
