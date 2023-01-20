@@ -47,8 +47,24 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showStorytellerLines = false;
   bool debugHasSavedHistory = false;
 
-  bool get canSave => narrativeNodes.narrative[currentTextNode].save ?? false;
+  void initialize() async {
+    narrativeNodes = await JsonManager.loadNarrative(
+      file: 'assets/json/narrativa_1.json',
+    );
+
+    withdrawLines = await JsonManager.loadWithdrawLines(
+      file: 'assets/json/storyteller/withdraw_lines.json',
+    );
+  }
+
+  @override
+  void initState() {
+    initialize();
+    super.initState();
+  }
+
   void saveGame() {
+    bool canSave = narrativeNodes.narrative[currentTextNode].save ?? false;
     if (!canSave) return;
 
     final saveIndex = narrativeNodes.narrative[currentTextNode].id;
@@ -71,19 +87,23 @@ class _MyHomePageState extends State<MyHomePage> {
       currentTextNode = option.nextNode - 1;
 
       if (option.setState == null) return;
-      final optionStates = option.setState!.keys.toList();
-      final optionValues = option.setState!.values.toList();
-      for (var i = 0; i < option.setState!.length; i++) {
-        if (optionValues[i] == true) {
-          if (choiceState.contains(optionStates[i])) return;
-
-          choiceState.add(optionStates[i]);
-          return;
-        }
-
-        choiceState.removeWhere((state) => state == optionStates[i]);
-      }
+      setChoiceState(option);
     });
+  }
+
+  void setChoiceState(Option option) {
+    final optionStates = option.setState!.keys.toList();
+    final optionValues = option.setState!.values.toList();
+    for (var i = 0; i < option.setState!.length; i++) {
+      if (optionValues[i] == true) {
+        if (choiceState.contains(optionStates[i])) return;
+
+        choiceState.add(optionStates[i]);
+        return;
+      }
+
+      choiceState.removeWhere((state) => state == optionStates[i]);
+    }
   }
 
   void removeOptionNode(Option option) {
@@ -113,22 +133,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return requiredStateKeys.every(
       (state) => choiceState.contains(state),
     );
-  }
-
-  void initialize() async {
-    narrativeNodes = await JsonManager.loadNarrative(
-      file: 'assets/json/narrativa_1.json',
-    );
-
-    withdrawLines = await JsonManager.loadWithdrawLines(
-      file: 'assets/json/storyteller/withdraw_lines.json',
-    );
-  }
-
-  @override
-  void initState() {
-    initialize();
-    super.initState();
   }
 
   @override
