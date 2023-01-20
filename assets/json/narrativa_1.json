@@ -177,7 +177,7 @@
                 },
                 {
                     "index": 1,
-                    "text": "Andar pra frente!",
+                    "text": "Andar pra sem rumo pra frente!",
                     "nextText": 8,
                     "setState": {
                         "atento": false
@@ -219,13 +219,18 @@
                     "text": "Vou andar sem rumo!",
                     "nextText": -1,
                     "remove": {
-                        "nodeName": "Dream_2.2",
-                        "id": 7,
-                        "optionIndex": 1
+                        "nodeName": "Dream_3.3",
+                        "id": 8,
+                        "optionIndex": 2
                     },
                     "setState": {
                         "atento": false
                     }
+                },
+                {
+                    "index": 3,
+                    "text": "Ir para uma construção que parece estranha de longe",
+                    "nextText": 10
                 }
             ]
         },
