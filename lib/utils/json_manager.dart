@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
 
-import 'models/models.dart';
+import '../models/models.dart';
 
 class JsonManager {
   final String jsonKey = 'gameHistory';

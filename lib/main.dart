@@ -3,9 +3,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'json_manager.dart';
 import 'models/models.dart';
 import 'styles/styles.dart';
+import 'utils/json_manager.dart';
 
 const debug = true;
 
