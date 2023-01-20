@@ -124,7 +124,7 @@
             "id": 5,
             "nodeName": "Dream_1",
             "save": true,
-            "title": "Você acorda do sonho.",
+            "title": "Você volta a sonhar, pra onde você vai?",
             "options": [
                 {
                     "index": 0,
@@ -134,13 +134,16 @@
                 {
                     "index": 1,
                     "text": "Andar pela trilha olhando o mapa",
-                    "nextText": 9
+                    "nextText": 8,
+                    "setState": {
+                        "atento": true
+                    }
                 }
             ]
         },
         {
             "id": 6,
-            "nodeName": "Dream_2.1",
+            "nodeName": "Dream_3.1",
             "save": false,
             "title": "Você tem certeza?? Andar sem rumo?",
             "options": [
@@ -152,57 +155,83 @@
                 {
                     "index": 1,
                     "text": "É... melhor não. Olhar o mapa",
-                    "nextText": 9
+                    "setState": {
+                        "atento": true
+                    },
+                    "nextText": 7
                 }
             ]
         },
         {
             "id": 7,
-            "nodeName": "Dream_2.2",
+            "nodeName": "Dream_3.2",
             "title": "Então ta! Você continua andando pra qual direção?",
             "options": [
                 {
                     "index": 0,
-                    "text": "leste",
-                    "nextText": 8
+                    "text": "Procuro no mapa a estrada para a cabana do velho jack",
+                    "requiredState": {
+                        "atento": true
+                    },
+                    "nextText": 10
                 },
                 {
                     "index": 1,
-                    "text": "oeste",
-                    "nextText": 8
+                    "text": "Andar pra frente!",
+                    "nextText": 8,
+                    "setState": {
+                        "atento": false
+                    }
                 },
                 {
                     "index": 2,
                     "text": "Escolho no MAPA um caminho para o posto de gasolina",
+                    "requiredState": {
+                        "atento": true
+                    },
                     "nextText": 9
                 }
             ]
         },
         {
             "id": 8,
-            "nodeName": "Dream_2.3",
-            "title": "Então ta! Você continua andando pra qual direção?",
+            "nodeName": "Dream_3.3",
+            "title": "Você caminhou por mais 30 min e senta para tomar água. Vc vai pra onde?",
             "options": [
                 {
                     "index": 0,
-                    "text": "leste",
-                    "nextText": -1
+                    "text": "Ir para estrada para a cabana do velho jack",
+                    "nextText": 10,
+                    "requiredState": {
+                        "atento": true
+                    }
                 },
                 {
                     "index": 1,
-                    "text": "oeste",
+                    "text": "Ir para o posto de gasolina",
+                    "nextText": 10,
+                    "requiredState": {
+                        "atento": true
+                    }
+                },
+                {
+                    "index": 2,
+                    "text": "Vou andar sem rumo!",
                     "nextText": -1,
                     "remove": {
                         "nodeName": "Dream_2.2",
                         "id": 7,
                         "optionIndex": 1
+                    },
+                    "setState": {
+                        "atento": false
                     }
                 }
             ]
         },
         {
             "id": 9,
-            "nodeName": "Dream_3",
+            "nodeName": "Dream_Posto_Ipiranga",
             "save": false,
             "title": "Você chega no posto ipiranga! Parabéns, vc ta vivo ainda!",
             "options": [
@@ -214,6 +243,42 @@
                 {
                     "index": 1,
                     "text": "Falar com a tartaruga frentista",
+                    "nextText": 11
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "nodeName": "Dream_Cabana_Jack",
+            "save": false,
+            "title": "Você chega na cabana do velho Jack. O que vc faz?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Olhar a lojinha na frente da cabana",
+                    "nextText": 4
+                },
+                {
+                    "index": 1,
+                    "text": "Chamar pelo velho Jack",
+                    "nextText": 11
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "nodeName": "Dream_4",
+            "save": true,
+            "title": "Não tenho mais história, espera eu terminar de escrever. Obrigado!",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Continuar esperando...",
+                    "nextText": 11
+                },
+                {
+                    "index": 1,
+                    "text": "Jogar de novo!",
                     "nextText": 1
                 }
             ]
