@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'models/models.dart';
 import 'styles/styles.dart';
 import 'utils/json_manager.dart';
+import 'utils/player_prefs_save.dart';
 
 const debug = true;
 
@@ -44,17 +45,20 @@ class _MyHomePageState extends State<MyHomePage> {
   int currentTextNode = 0;
   int savedNodeIndex = 0;
   bool showStorytellerLines = false;
+  bool debugHasSavedHistory = false;
 
   bool get canSave => narrativeNodes.narrative[currentTextNode].save ?? false;
-
   void saveGame() {
     if (!canSave) return;
 
     final saveIndex = narrativeNodes.narrative[currentTextNode].id;
     savedNodeIndex = saveIndex - 1;
+
+    PlayerPrefs.saveProgress(savedNodeIndex);
+    PlayerPrefs.saveHistoryInPrefs(narrativeNodes);
   }
 
-  void setNextTextNode(Option option) {
+  void setCurrentTextNode(Option option) {
     if (option.nextNode == -1) {
       setState(() {
         currentTextNode = savedNodeIndex;
@@ -97,11 +101,19 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void onChoiceSubmitted(Option option) {
     saveGame();
-    setNextTextNode(option);
+    setCurrentTextNode(option);
     removeOptionNode(option);
   }
 
   void onTryAgainSubmitted() => setState(() => showStorytellerLines = false);
+
+  bool requiredStateExists(Option option) {
+    final requiredStateKeys = option.requiredState?.keys.toList() ?? [];
+    // print('contains? ${choiceState.contains(state)}');
+    return requiredStateKeys.every(
+      (state) => choiceState.contains(state),
+    );
+  }
 
   void initialize() async {
     narrativeNodes = await JsonManager.loadNarrative(
@@ -126,10 +138,21 @@ class _MyHomePageState extends State<MyHomePage> {
       bottomNavigationBar: debug ? debugState() : null,
       appBar: AppBar(
         title: Text(widget.title),
+        leadingWidth: 80.0,
         leading: debug
-            ? IconButton(
-                onPressed: debugNarrativeBottomSheet,
-                icon: const Icon(Icons.info),
+            ? Row(
+                children: [
+                  IconButton(
+                    onPressed: debugNarrativeBottomSheet,
+                    icon: const Icon(Icons.info),
+                    iconSize: 20,
+                  ),
+                  const IconButton(
+                    onPressed: PlayerPrefs.clearPrefs,
+                    icon: Icon(Icons.remove_circle),
+                    iconSize: 20,
+                  ),
+                ],
               )
             : null,
       ),
@@ -146,8 +169,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void debugNarrativeBottomSheet() {
-    final narrative = narrativeNodes.narrative
+  void debugNarrativeBottomSheet() async {
+    final savedNarrativeJson = await PlayerPrefs.getHistoryFromPrefs();
+    final currentNarrative = narrativeNodes.narrative
         .map(
           (e) => Padding(
             padding: const EdgeInsets.symmetric(
@@ -163,29 +187,60 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         )
         .toList();
+    final narrative = savedNarrativeJson == null
+        ? currentNarrative
+        : savedNarrativeJson.narrative
+            .map(
+              (e) => Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12.0,
+                  horizontal: 4.0,
+                ),
+                child: SelectableText(
+                  json.encode(
+                    e.toJson(),
+                  ),
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
+            )
+            .toList();
 
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
-          return Container(
-            color: Colors.grey[700],
-            child: SingleChildScrollView(
-                child: Column(
-              children: [
-                Container(
-                  margin: const EdgeInsets.all(12.0),
-                  padding: const EdgeInsets.all(16.0),
-                  color: Colors.blueGrey[800],
-                  child: Text(
-                    json.encode(narrativeNodes.narrative[currentTextNode]),
-                    style: const TextStyle(color: Colors.white),
+          return StatefulBuilder(builder: (context, setModalState) {
+            final canShowSaved =
+                savedNarrativeJson != null && debugHasSavedHistory;
+
+            return Container(
+              color: Colors.grey[700],
+              child: SingleChildScrollView(
+                  child: Column(
+                children: [
+                  TextButton(
+                    onPressed: () => setModalState(() {
+                      debugHasSavedHistory = !debugHasSavedHistory;
+                    }),
+                    child: Text(
+                      !canShowSaved ? 'currentNarrative' : 'savedNarrative',
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16.0),
-                ...narrative,
-              ],
-            )),
-          );
+                  Container(
+                    margin: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(16.0),
+                    color: Colors.blueGrey[800],
+                    child: Text(
+                      json.encode(narrativeNodes.narrative[currentTextNode]),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  ...narrative,
+                ],
+              )),
+            );
+          });
         });
   }
 
@@ -282,11 +337,7 @@ class _MyHomePageState extends State<MyHomePage> {
         shrinkWrap: true,
         children: adventureOptions.map(
           (option) {
-            final requiredStateKeys = option.requiredState?.keys.toList() ?? [];
-            final requiredStateExists =
-                requiredStateKeys.every((state) => choiceState.contains(state));
-
-            if (option.requiredState == null || requiredStateExists) {
+            if (option.requiredState == null || requiredStateExists(option)) {
               return choiceButton(
                 onSubmmit: () => onChoiceSubmitted(option),
                 optionText: option.text,
