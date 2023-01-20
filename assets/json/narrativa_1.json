@@ -52,8 +52,8 @@
                     "index": 1,
                     "text": "Pega o mapa, mas sai correndo.",
                     "setState": {
-                        "mapa": true,
-                        "jar": false
+                        "jar": false,
+                        "mapa": true
                     },
                     "nextText": 3
                 },

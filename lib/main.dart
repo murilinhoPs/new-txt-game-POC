@@ -8,7 +8,7 @@ import 'styles/styles.dart';
 import 'utils/json_manager.dart';
 import 'utils/player_prefs_save.dart';
 
-const debug = true;
+bool debug = false;
 
 void main() {
   runApp(const MyApp());
@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'txt adventure poc',
       theme: ThemeData(
         primarySwatch: Colors.green,
@@ -47,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool showStorytellerLines = false;
   bool debugHasSavedHistory = false;
 
-  void initialize() async {
+  Future<List> initialize() async {
     narrativeNodes = await JsonManager.loadNarrative(
       file: 'assets/json/narrativa_1.json',
     );
@@ -55,6 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
     withdrawLines = await JsonManager.loadWithdrawLines(
       file: 'assets/json/storyteller/withdraw_lines.json',
     );
+
+    return [narrativeNodes, withdrawLines];
   }
 
   @override
@@ -95,14 +98,13 @@ class _MyHomePageState extends State<MyHomePage> {
     final optionStates = option.setState!.keys.toList();
     final optionValues = option.setState!.values.toList();
     for (var i = 0; i < option.setState!.length; i++) {
-      if (optionValues[i] == true) {
+      if (optionValues[i]) {
         if (choiceState.contains(optionStates[i])) return;
 
         choiceState.add(optionStates[i]);
-        return;
+      } else {
+        choiceState.removeWhere((state) => state == optionStates[i]);
       }
-
-      choiceState.removeWhere((state) => state == optionStates[i]);
     }
   }
 
@@ -159,11 +161,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               )
             : null,
+        actions: [
+          IconButton(
+            onPressed: () => setState(
+              () => debug = !debug,
+            ),
+            icon: const Icon(Icons.developer_mode_outlined),
+            iconSize: 20,
+            color: showStorytellerLines ? Colors.white : Colors.grey,
+          ),
+        ],
       ),
       body: FutureBuilder(
-          future: JsonManager.loadNarrative(
-            file: 'assets/json/narrativa_1.json',
-          ),
+          future: initialize(),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return narrativeWidget();
@@ -402,7 +412,7 @@ class _MyHomePageState extends State<MyHomePage> {
       margin: const EdgeInsets.only(top: 15.0),
       child: choiceButton(
         onSubmmit: onTryAgainSubmitted,
-        optionText: 'Vou tentar de novo',
+        optionText: '...',
       ),
     );
   }
