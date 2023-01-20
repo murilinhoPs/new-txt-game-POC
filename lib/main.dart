@@ -262,7 +262,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Container(
       padding: const EdgeInsets.only(top: 4.8, left: 12.0),
       height: 30.0,
-      color: Colors.grey[700],
+      color: const Color.fromARGB(255, 141, 32, 32),
       child: Text(
         'currentState: $choiceState',
         style: const TextStyle(color: Colors.white),
