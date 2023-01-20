@@ -3,10 +3,9 @@ import 'dart:convert';
 import 'package:flutter/services.dart' show rootBundle;
 
 import '../models/models.dart';
+import 'player_prefs_save.dart';
 
 class JsonManager {
-  final String jsonKey = 'gameHistory';
-
   static Future<String> _loadJson(String json) async {
     return await rootBundle.loadString(json);
   }
@@ -14,12 +13,12 @@ class JsonManager {
   static Future<AllNarrativeNodesList> loadNarrative({
     required String file,
   }) async {
+    final savedNarrative = await PlayerPrefs.getHistoryFromPrefs();
+    if (savedNarrative != null) return savedNarrative;
+
     final jsonProduct = await _loadJson(file);
     final jsonResponse = json.decode(jsonProduct);
-
-    final allNarrativeNodes = AllNarrativeNodesList.fromJson(jsonResponse);
-
-    return allNarrativeNodes;
+    return AllNarrativeNodesList.fromJson(jsonResponse);
   }
 
   static Future<WithdrawLines> loadWithdrawLines({
