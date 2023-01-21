@@ -115,10 +115,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final index = remove.id - 1;
     final nodeOptions = narrativeNodes.narrative[index].options;
     nodeOptions.removeWhere((option) => option.index == remove.optionIndex);
-
-    setState(() {
-      narrativeNodes.narrative[remove.id - 1].options = nodeOptions;
-    });
+    narrativeNodes.narrative[remove.id - 1].options = nodeOptions;
+    PlayerPrefs.saveHistoryInPrefs(narrativeNodes);
   }
 
   void onChoiceSubmitted(Option option) {
