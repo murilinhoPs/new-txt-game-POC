@@ -1,0 +1,459 @@
+{
+    "adventure": [
+        {
+            "id": 1,
+            "nodeName": "Intro_1",
+            "save": true,
+            "title": "Você acorda na sua barraca e vê um fantasma com uma jarra na mão te encarando. \nO que você faz?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Você vai até ele e pega a jarra.",
+                    "setState": {
+                        "jar": true
+                    },
+                    "nextText": 3,
+                    "extra": {
+                        "id": "item_1",
+                        "type": "achievement",
+                        "name": "Primeiro item pego",
+                        "image": "FirstItem(2x2)",
+                        "description": "o item é uma jarra inútil, apenas pra testes"
+                    }
+                },
+                {
+                    "index": 1,
+                    "text": "Você fica no saco de dormir e se esconde.",
+                    "nextText": 2
+                },
+                {
+                    "index": 2,
+                    "text": "Você rasga a cabana e foge.",
+                    "nextText": 2
+                },
+                {
+                    "index": 3,
+                    "text": "Pega a jarra mas foge pela entrada.",
+                    "setState": {
+                        "jar": true
+                    },
+                    "nextText": 2,
+                    "extra": {
+                        "id": "item_1",
+                        "type": "achievement",
+                        "name": "Primeiro item pego",
+                        "image": "FirstItem(2x2)",
+                        "description": "o item é uma jarra inútil, apenas pra testes"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "nodeName": "Intro_2",
+            "save": false,
+            "title": "Você saiu tão apressado que esqueceu o mapa para se localizar na floresta. Nessa hora passa um estranho te oferecendo um mapa.",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Você pega o mapa e agradece.",
+                    "setState": {
+                        "mapa": true
+                    },
+                    "nextText": 3
+                },
+                {
+                    "index": 1,
+                    "text": "Pega o mapa, mas sai correndo.",
+                    "setState": {
+                        "mapa": true,
+                        "jar": false
+                    },
+                    "nextText": 3
+                },
+                {
+                    "index": 2,
+                    "text": "CORREEEEEEE COM A JARRA, MAS SEM O MAPA!!!!",
+                    "requiredState": {
+                        "jar": true
+                    },
+                    "nextText": 3
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "nodeName": "Intro_3",
+            "title": "Pra sair da floresta, vc acha o caminho pelo mapa. Chegando na saída vc vê uma pessoa entrando na floresta e cumprimenta ela",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Você entrega o mapa para ela",
+                    "requiredState": {
+                        "mapa": true
+                    },
+                    "setState": {
+                        "mapa": false
+                    },
+                    "nextText": 4
+                },
+                {
+                    "index": 1,
+                    "text": "Cumprimenta e segue seu rumo",
+                    "nextText": 4
+                }
+            ]
+        },
+        {
+            "id": 4,
+            "nodeName": "Intro_4",
+            "title": "Você acorda do sonho.",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Obrigado.",
+                    "nextText": 1
+                },
+                {
+                    "index": 1,
+                    "text": "Por jogar!",
+                    "nextText": 1
+                },
+                {
+                    "index": 2,
+                    "text": "???",
+                    "nextText": -1
+                },
+                {
+                    "index": 3,
+                    "text": "Gostou do mapa? Voltar a dormir para sonhar dnv",
+                    "requiredState": {
+                        "mapa": true
+                    },
+                    "nextText": 5,
+                    "extra": {
+                        "id": "c_1",
+                        "type": "achievement",
+                        "name": "Primeira conquista!",
+                        "image": "FirstAchievement(2x2)"
+                    }
+                }
+            ]
+        },
+        {
+            "id": 5,
+            "nodeName": "Dream_1",
+            "save": true,
+            "title": "Você volta a sonhar, pra onde você vai?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Andar pela trilha sem rumo",
+                    "nextText": 6
+                },
+                {
+                    "index": 1,
+                    "text": "Andar pela trilha olhando o mapa",
+                    "nextText": 8,
+                    "setState": {
+                        "atento": true
+                    }
+                }
+            ]
+        },
+        {
+            "id": 6,
+            "nodeName": "Dream_3.1",
+            "save": false,
+            "title": "Você tem certeza?? Andar sem rumo?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Sim",
+                    "nextText": 7
+                },
+                {
+                    "index": 1,
+                    "text": "É... melhor não. Olhar o mapa",
+                    "setState": {
+                        "atento": true
+                    },
+                    "nextText": 7
+                }
+            ]
+        },
+        {
+            "id": 7,
+            "nodeName": "Dream_3.2",
+            "title": "Então ta! Você continua andando pra qual direção?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Procuro no mapa a estrada para a cabana do velho jack",
+                    "requiredState": {
+                        "atento": true
+                    },
+                    "nextText": 10
+                },
+                {
+                    "index": 1,
+                    "text": "Andar pra sem rumo pra frente!",
+                    "nextText": 8,
+                    "setState": {
+                        "atento": false
+                    }
+                },
+                {
+                    "index": 2,
+                    "text": "Escolho no MAPA um caminho para o posto de gasolina",
+                    "requiredState": {
+                        "atento": true
+                    },
+                    "nextText": 9
+                }
+            ]
+        },
+        {
+            "id": 8,
+            "nodeName": "Dream_3.3",
+            "title": "Você caminhou por mais 30 min e senta para tomar água. Vc vai pra onde?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Ir para estrada para a cabana do velho jack",
+                    "nextText": 10,
+                    "requiredState": {
+                        "atento": true
+                    }
+                },
+                {
+                    "index": 1,
+                    "text": "Ir para o posto de gasolina",
+                    "nextText": 10,
+                    "requiredState": {
+                        "atento": true
+                    }
+                },
+                {
+                    "index": 2,
+                    "text": "Vou andar sem rumo!",
+                    "nextText": -1,
+                    "remove": {
+                        "nodeName": "Dream_3.3",
+                        "id": 8,
+                        "optionIndex": 2
+                    },
+                    "setState": {
+                        "atento": false
+                    }
+                },
+                {
+                    "index": 3,
+                    "text": "Ir para uma construção que parece estranha de longe",
+                    "nextText": 10
+                }
+            ]
+        },
+        {
+            "id": 9,
+            "nodeName": "Dream_Posto_Ipiranga",
+            "save": false,
+            "title": "Você chega no posto ipiranga! Parabéns, vc ta vivo ainda!",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Olhar a lojinha",
+                    "nextText": 4
+                },
+                {
+                    "index": 1,
+                    "text": "Falar com a tartaruga frentista",
+                    "nextText": 11
+                }
+            ]
+        },
+        {
+            "id": 10,
+            "nodeName": "Dream_Cabana_Jack",
+            "save": false,
+            "title": "Você chega na cabana do velho Jack. O que vc faz?",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Olhar a lojinha na frente da cabana",
+                    "nextText": 4
+                },
+                {
+                    "index": 1,
+                    "text": "Chamar pelo velho Jack",
+                    "nextText": 11,
+                    "extra": {
+                        "id": "npc_jack",
+                        "type": "NPC",
+                        "name": "Velho Jack",
+                        "image": "Jack(2x2)",
+                        "description": "O velho jack vive no posto ipiranga desde que construíram essa rodovia. Ele é quieto e gosta de se comunicar por cartas, ele parece propenso a te ajudar",
+                        "details": {
+                            "radio": "GHz: 34",
+                            "updateDescription": "Você pode chamar pelo rádio quando quiser",
+                            "relationship": 3,
+                            "stats": {
+                                "knowledge": 20,
+                                "charisma": 5,
+                                "force": -1,
+                                "intelligence": 10,
+                                "agility": 2
+                            },
+                            "goodChoice": true
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "id": 11,
+            "nodeName": "Dream_4",
+            "save": true,
+            "title": "O jack te cumprimenta e te entrega uma carta. Parabéns, ele é o primeiro NPC que você interage",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Pegar a carta do Jack?",
+                    "nextText": 12,
+                    "mapLocation": {
+                        "id": "Jack",
+                        "show": true
+                    },
+                    "extra": {
+                        "id": "player_1",
+                        "type": "player",
+                        "name": "nome do personagem",
+                        "image": null,
+                        "details": {
+                            "radio": null,
+                            "updateDescription": "LV +1",
+                            "relationship": null,
+                            "stats": {
+                                "knowledge": 1,
+                                "charisma": 2,
+                                "force": null,
+                                "intelligence": 1,
+                                "agility": null
+                            },
+                            "goodChoice": null
+                        }
+                    }
+                },
+                {
+                    "index": 1,
+                    "text": "Jogar de novo!",
+                    "nextText": 1,
+                    "mapLocation": null
+                }
+            ]
+        },
+        {
+            "id": 12,
+            "nodeName": "Dream_4",
+            "save": false,
+            "title": "Você precisa ler essa carta agora!",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Ler a carta",
+                    "nextText": 13,
+                    "extra": {
+                        "id": "jack_letter",
+                        "type": "document",
+                        "name": "Carta do Jack",
+                        "image": "jackLetter1x1",
+                        "description": "conteúdo da carta, vou pensar no que escrever...",
+                        "audio": null
+                    }
+                }
+            ]
+        },
+        {
+            "id": 13,
+            "nodeName": "Dream_4",
+            "save": false,
+            "title": "Na carta está escrito que você precisa falar com um velho numa cabana a 1km daqui. Se quiser mais detalhes, abra a carta no seu inventário não vou ler tudo pra você!",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Continuar no caminho",
+                    "nextText": 15,
+                    "extra": null
+                },
+                {
+                    "index": 0,
+                    "text": "Parar para descansar numa cabana",
+                    "nextText": 14
+                }
+            ]
+        },
+        {
+            "id": 14,
+            "nodeName": "Dream_4",
+            "save": true,
+            "title": "Você encontra uma carta de um jogo que foi muito famoso, agora só resta lembrar...",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Apenas descansar",
+                    "nextText": 15,
+                    "extra": null
+                },
+                {
+                    "index": 0,
+                    "text": "Pegar a carta e dormir",
+                    "nextText": 16,
+                    "extra": {
+                        "id": "magic_arrow",
+                        "type": "sticker",
+                        "name": "Flechas mágicas x10",
+                        "image": "magicArrow1x",
+                        "description": "conteúdo da carta, vou pensar no que escrever...",
+                        "audio": null
+                    }
+                }
+            ]
+        },
+        {
+            "id": 15,
+            "nodeName": "End_1",
+            "save": false,
+            "title": "Você acorda, obrigado por jogar!",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Jogar novamente",
+                    "nextText": 1
+                },
+                {
+                    "index": 0,
+                    "text": "terminar o jogo",
+                    "nextText": -1
+                }
+            ]
+        },
+        {
+            "id": 16,
+            "nodeName": "End_2",
+            "save": false,
+            "title": "Essa carta te faz lembrar do seu..... Você acorda",
+            "options": [
+                {
+                    "index": 0,
+                    "text": "Jogar novamente",
+                    "nextText": 1
+                },
+                {
+                    "index": 0,
+                    "text": "terminar o jogo",
+                    "nextText": -1
+                }
+            ]
+        }
+    ]
+}
