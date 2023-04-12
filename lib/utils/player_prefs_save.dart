@@ -30,20 +30,21 @@ class PlayerPrefs {
     preferences.remove(jsonKey);
   }
 
-  static saveHistoryInPrefs(AllNarrativeNodesList adventure) async {
+  static saveHistoryInPrefs(NarrativeNodesListDataModel adventure) async {
     final prefs = await SharedPreferences.getInstance();
 
     prefs.setString(jsonKey, json.encode(adventure));
   }
 
-  static Future<AllNarrativeNodesList?> getHistoryFromPrefs() async {
+  static Future<NarrativeNodesListDataModel?> getHistoryFromPrefs() async {
     final prefs = await SharedPreferences.getInstance();
 
     final getAdventure = prefs.getString(jsonKey);
     if (getAdventure == null) return null;
 
     final newAdventureString = json.decode(getAdventure);
-    final newAdventure = AllNarrativeNodesList.fromJson(newAdventureString);
+    final newAdventure =
+        NarrativeNodesListDataModel.fromJson(newAdventureString);
 
     return newAdventure;
   }

@@ -9,7 +9,7 @@ class JsonDataManager {
     return await rootBundle.loadString(json);
   }
 
-  static Future<AllNarrativeNodesList> loadNarrative({
+  static Future<NarrativeNodesListDataModel> loadNarrative({
     required String file,
   }) async {
     final savedNarrative = await PlayerPrefs.getHistoryFromPrefs();
@@ -17,14 +17,14 @@ class JsonDataManager {
 
     final jsonProduct = await _loadJson(file);
     final jsonResponse = json.decode(jsonProduct);
-    return AllNarrativeNodesList.fromJson(jsonResponse);
+    return NarrativeNodesListDataModel.fromJson(jsonResponse);
   }
 
-  static Future<WithdrawLines> loadWithdrawLines({
+  static Future<WithdrawLinesDataModel> loadWithdrawLines({
     required String file,
   }) async {
     final jsonResponse = json.decode(await _loadJson(file));
 
-    return WithdrawLines.fromJson(jsonResponse);
+    return WithdrawLinesDataModel.fromJson(jsonResponse);
   }
 }

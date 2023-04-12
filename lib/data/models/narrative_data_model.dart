@@ -1,12 +1,12 @@
-class AllNarrativeNodesList {
-  late List<NarrativeNode> narrative;
+class NarrativeNodesListDataModel {
+  late List<NarrativeNodeDataModel> narrative;
 
-  AllNarrativeNodesList({required this.narrative});
+  NarrativeNodesListDataModel({required this.narrative});
 
-  AllNarrativeNodesList.fromJson(Map<String, dynamic> json) {
-    narrative = <NarrativeNode>[];
+  NarrativeNodesListDataModel.fromJson(Map<String, dynamic> json) {
+    narrative = <NarrativeNodeDataModel>[];
     json['adventure'].forEach((v) {
-      narrative.add(NarrativeNode.fromJson(v));
+      narrative.add(NarrativeNodeDataModel.fromJson(v));
     });
   }
 
@@ -18,14 +18,14 @@ class AllNarrativeNodesList {
   }
 }
 
-class NarrativeNode {
+class NarrativeNodeDataModel {
+  bool? save;
   late int id;
-  late bool? save;
   late String title;
   late String nodeName;
-  late List<Option> options;
+  late List<OptionNodeDataModel> options;
 
-  NarrativeNode({
+  NarrativeNodeDataModel({
     required this.id,
     required this.save,
     required this.title,
@@ -33,14 +33,14 @@ class NarrativeNode {
     required this.options,
   });
 
-  NarrativeNode.fromJson(Map<String, dynamic> json) {
+  NarrativeNodeDataModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     nodeName = json['nodeName'];
     save = json['save'] ?? false;
-    options = <Option>[];
+    options = <OptionNodeDataModel>[];
     json['options'].forEach((v) {
-      options.add(Option.fromJson(v));
+      options.add(OptionNodeDataModel.fromJson(v));
     });
   }
 
@@ -58,15 +58,15 @@ class NarrativeNode {
   }
 }
 
-class Option {
+class OptionNodeDataModel {
   late int index;
   late int nextNode;
   late String text;
-  late Remove? removeParams;
+  late RemoveDataModel? removeParams;
   late Map<String, bool>? setState;
   late Map<String, bool>? requiredState;
 
-  Option({
+  OptionNodeDataModel({
     required this.index,
     required this.text,
     required this.nextNode,
@@ -75,7 +75,7 @@ class Option {
     this.removeParams,
   });
 
-  Option.fromJson(Map<String, dynamic> json) {
+  OptionNodeDataModel.fromJson(Map<String, dynamic> json) {
     index = json['index'];
     text = json['text'];
     nextNode = json['nextText'];
@@ -85,8 +85,9 @@ class Option {
     requiredState = json['requiredState'] != null
         ? Map<String, bool>.from(json['requiredState'])
         : null;
-    removeParams =
-        json['remove'] != null ? Remove.fromJson(json['remove']) : null;
+    removeParams = json['remove'] != null
+        ? RemoveDataModel.fromJson(json['remove'])
+        : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -107,18 +108,18 @@ class Option {
   }
 }
 
-class Remove {
+class RemoveDataModel {
   String? nodeName;
   late int id;
   late int optionIndex;
 
-  Remove({
+  RemoveDataModel({
     this.nodeName,
     required this.id,
     required this.optionIndex,
   });
 
-  Remove.fromJson(Map<String, dynamic> json) {
+  RemoveDataModel.fromJson(Map<String, dynamic> json) {
     nodeName = json['nodeName'];
     id = json['id'];
     optionIndex = json['optionIndex'];

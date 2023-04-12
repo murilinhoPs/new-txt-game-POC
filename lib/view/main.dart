@@ -37,8 +37,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late AllNarrativeNodesList narrativeNodes;
-  late WithdrawLines withdrawLines;
+  late NarrativeNodesListDataModel narrativeNodes;
+  late WithdrawLinesDataModel withdrawLines;
 
   List<String> choiceState = [];
   int currentTextNode = 0;
@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
     PlayerPrefs.saveHistoryInPrefs(narrativeNodes);
   }
 
-  void setCurrentTextNode(Option option) {
+  void setCurrentTextNode(OptionNodeDataModel option) {
     if (option.nextNode == -1) {
       setState(() {
         currentTextNode = savedNodeIndex;
@@ -92,7 +92,7 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  void setChoiceState(Option option) {
+  void setChoiceState(OptionNodeDataModel option) {
     final optionStates = option.setState!.keys.toList();
     final optionValues = option.setState!.values.toList();
     for (var i = 0; i < option.setState!.length; i++) {
@@ -106,7 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
-  void removeOptionNode(Option option) {
+  void removeOptionNode(OptionNodeDataModel option) {
     final remove = option.removeParams;
     if (remove == null) return;
 
@@ -117,7 +117,7 @@ class _MyHomePageState extends State<MyHomePage> {
     PlayerPrefs.saveHistoryInPrefs(narrativeNodes);
   }
 
-  void onChoiceSubmitted(Option option) {
+  void onChoiceSubmitted(OptionNodeDataModel option) {
     saveGame();
     setCurrentTextNode(option);
     removeOptionNode(option);
@@ -125,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void onTryAgainSubmitted() => setState(() => showStorytellerLines = false);
 
-  bool requiredStateExists(Option option) {
+  bool requiredStateExists(OptionNodeDataModel option) {
     final requiredStateKeys = option.requiredState?.keys.toList() ?? [];
     // print('contains? ${choiceState.contains(state)}');
     return requiredStateKeys.every(

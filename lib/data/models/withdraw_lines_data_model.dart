@@ -1,11 +1,11 @@
-class WithdrawLines {
+class WithdrawLinesDataModel {
   late List<String> lines;
 
-  WithdrawLines({
+  WithdrawLinesDataModel({
     required this.lines,
   });
 
-  WithdrawLines.fromJson(Map<String, dynamic> json) {
+  WithdrawLinesDataModel.fromJson(Map<String, dynamic> json) {
     lines = json['lines'].cast<String>();
   }
 
