@@ -2,8 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:txt_game_poc/data/models/models.dart';
-import 'package:txt_game_poc/data/json_data_manager.dart';
 import 'package:txt_game_poc/data/narrador_end_lines_data_model.dart';
 import 'package:txt_game_poc/data/narrative_data_model.dart';
 import 'package:txt_game_poc/utils/player_prefs_save.dart';
@@ -20,7 +18,7 @@ class TextGamePage extends StatefulWidget {
 
 class _TextGamePageState extends State<TextGamePage> {
   late NarrativeNodesListDataModel narrativeNodes;
-  late NarradorEndLinesDataModel narradorEndLines;
+  late NarradorEndLinesDataModel narradorLines;
 
   List<String> choiceState = [];
   int currentTextNode = 0;
@@ -28,21 +26,8 @@ class _TextGamePageState extends State<TextGamePage> {
   bool showStorytellerLines = false;
   bool debugHasSavedHistory = false;
 
-  Future<List> initialize() async {
-    narrativeNodes = await JsonDataManager.loadNarrative(
-      filePath: 'assets/json/narrativa_1.json',
-    );
-
-    narradorEndLines = await JsonDataManager.loadWithdrawLines(
-      filePath: 'assets/json/storyteller/withdraw_lines.json',
-    );
-
-    return [narrativeNodes, narradorEndLines];
-  }
-
   @override
   void initState() {
-    initialize();
     super.initState();
   }
 
@@ -150,14 +135,7 @@ class _TextGamePageState extends State<TextGamePage> {
           ),
         ],
       ),
-      body: FutureBuilder(
-          future: initialize(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return narrativeWidget();
-            }
-            return const Center(child: CircularProgressIndicator());
-          }),
+      body: narrativeWidget(),
     );
   }
 
@@ -250,7 +228,7 @@ class _TextGamePageState extends State<TextGamePage> {
 
   Widget narrativeWidget() {
     final randomLine = Random().nextInt(
-      narradorEndLines.lines.length,
+      narradorLines.lines.length,
     );
 
     return Column(
@@ -297,7 +275,7 @@ class _TextGamePageState extends State<TextGamePage> {
                         child: SelectableText(
                           !showStorytellerLines
                               ? narrativeNodes.narrative[currentTextNode].title
-                              : narradorEndLines.lines[randomLine],
+                              : narradorLines.lines[randomLine],
                           style: const TextStyle(
                             fontSize: 22,
                           ),
