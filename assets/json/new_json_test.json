@@ -134,8 +134,8 @@
                     "extra": {
                         "id": "c_1",
                         "type": "achievement",
-                        "name": "Primeira conquista!",
-                        "image": "FirstAchievement(2x2)"
+                        "name": "Iniciante na história",
+                        "image": "FirstAchievement(1x1)"
                     }
                 }
             ]
@@ -268,7 +268,7 @@
                 {
                     "index": 1,
                     "text": "Falar com a tartaruga frentista",
-                    "nextText": 11
+                    "nextText": 10
                 }
             ]
         },
@@ -276,7 +276,7 @@
             "id": 10,
             "nodeName": "Dream_Cabana_Jack",
             "save": false,
-            "title": "Você chega na cabana do velho Jack. O que vc faz?",
+            "title": "Ela apenas aponta para a cabana do velho Jack. O que vc faz?",
             "options": [
                 {
                     "index": 0,
@@ -285,7 +285,7 @@
                 },
                 {
                     "index": 1,
-                    "text": "Chamar pelo velho Jack",
+                    "text": "Ir para a cabana e Chamar pelo velho Jack",
                     "nextText": 11,
                     "extra": {
                         "id": "npc_jack",
@@ -368,7 +368,8 @@
                         "name": "Carta do Jack",
                         "image": "jackLetter1x1",
                         "description": "conteúdo da carta, vou pensar no que escrever...",
-                        "audio": null
+                        "audio": null,
+                        "details": null
                     }
                 }
             ]
@@ -410,7 +411,7 @@
                     "nextText": 16,
                     "extra": {
                         "id": "magic_arrow",
-                        "type": "sticker",
+                        "type": "card",
                         "name": "Flechas mágicas x10",
                         "image": "magicArrow1x",
                         "description": "conteúdo da carta, vou pensar no que escrever...",
