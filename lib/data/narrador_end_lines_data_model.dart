@@ -1,11 +1,11 @@
-class WithdrawLinesDataModel {
+class NarradorEndLinesDataModel {
   late List<String> lines;
 
-  WithdrawLinesDataModel({
+  NarradorEndLinesDataModel({
     required this.lines,
   });
 
-  WithdrawLinesDataModel.fromJson(Map<String, dynamic> json) {
+  NarradorEndLinesDataModel.fromJson(Map<String, dynamic> json) {
     lines = json['lines'].cast<String>();
   }
 

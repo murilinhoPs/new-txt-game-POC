@@ -4,6 +4,8 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:txt_game_poc/data/models/models.dart';
 import 'package:txt_game_poc/data/json_data_manager.dart';
+import 'package:txt_game_poc/data/narrador_end_lines_data_model.dart';
+import 'package:txt_game_poc/data/narrative_data_model.dart';
 import 'package:txt_game_poc/utils/player_prefs_save.dart';
 import 'package:txt_game_poc/view/styles/styles.dart';
 
@@ -38,7 +40,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late NarrativeNodesListDataModel narrativeNodes;
-  late WithdrawLinesDataModel withdrawLines;
+  late NarradorEndLinesDataModel narradorEndLines;
 
   List<String> choiceState = [];
   int currentTextNode = 0;
@@ -48,14 +50,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List> initialize() async {
     narrativeNodes = await JsonDataManager.loadNarrative(
-      file: 'assets/json/narrativa_1.json',
+      filePath: 'assets/json/narrativa_1.json',
     );
 
-    withdrawLines = await JsonDataManager.loadWithdrawLines(
-      file: 'assets/json/storyteller/withdraw_lines.json',
+    narradorEndLines = await JsonDataManager.loadWithdrawLines(
+      filePath: 'assets/json/storyteller/withdraw_lines.json',
     );
 
-    return [narrativeNodes, withdrawLines];
+    return [narrativeNodes, narradorEndLines];
   }
 
   @override
@@ -268,7 +270,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Widget narrativeWidget() {
     final randomLine = Random().nextInt(
-      withdrawLines.lines.length,
+      narradorEndLines.lines.length,
     );
 
     return Column(
@@ -315,7 +317,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         child: SelectableText(
                           !showStorytellerLines
                               ? narrativeNodes.narrative[currentTextNode].title
-                              : withdrawLines.lines[randomLine],
+                              : narradorEndLines.lines[randomLine],
                           style: const TextStyle(
                             fontSize: 22,
                           ),
