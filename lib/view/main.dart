@@ -2,11 +2,10 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
-import 'models/models.dart';
-import 'styles/styles.dart';
-import 'utils/json_manager.dart';
-import 'utils/player_prefs_save.dart';
+import 'package:txt_game_poc/data/models/models.dart';
+import 'package:txt_game_poc/data/json_data_manager.dart';
+import 'package:txt_game_poc/utils/player_prefs_save.dart';
+import 'package:txt_game_poc/view/styles/styles.dart';
 
 bool debug = false;
 
@@ -25,14 +24,13 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.green,
       ),
-      home: const MyHomePage(title: 'Poc Page'),
+      home: const MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  final String title;
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -49,11 +47,11 @@ class _MyHomePageState extends State<MyHomePage> {
   bool debugHasSavedHistory = false;
 
   Future<List> initialize() async {
-    narrativeNodes = await JsonManager.loadNarrative(
+    narrativeNodes = await JsonDataManager.loadNarrative(
       file: 'assets/json/narrativa_1.json',
     );
 
-    withdrawLines = await JsonManager.loadWithdrawLines(
+    withdrawLines = await JsonDataManager.loadWithdrawLines(
       file: 'assets/json/storyteller/withdraw_lines.json',
     );
 
@@ -141,7 +139,7 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: const Color.fromARGB(255, 157, 145, 127),
       bottomNavigationBar: debug ? debugState() : null,
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Poc'),
         leadingWidth: 80.0,
         leading: debug
             ? Row(

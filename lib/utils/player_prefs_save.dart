@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../models/models.dart';
+import 'package:txt_game_poc/data/models/models.dart';
 
 class PlayerPrefs {
   static const String curentTextKey = 'curentText';

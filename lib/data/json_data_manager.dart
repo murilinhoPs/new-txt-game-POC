@@ -1,11 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:txt_game_poc/data/models/models.dart';
+import 'package:txt_game_poc/utils/player_prefs_save.dart';
 
-import '../models/models.dart';
-import 'player_prefs_save.dart';
-
-class JsonManager {
+class JsonDataManager {
   static Future<String> _loadJson(String json) async {
     return await rootBundle.loadString(json);
   }
