@@ -60,6 +60,37 @@
                     "setState": {
                         "mapa": true
                     },
+                    "newSetState": [
+                        {
+                            "state": {
+                                "mapa": true
+                            },
+                            "isItem": true,
+                            "details": {
+                                "name": "mapa",
+                                "description": "pra que server esse mapa",
+                                "image": "mapa1img"
+                            }
+                        },
+                        {
+                            "state": {
+                                "mapa2": true
+                            },
+                            "isItem": true,
+                            "details": {
+                                "name": "mapa2",
+                                "description": "pra que server esse mapa2",
+                                "image": "mapa2img"
+                            }
+                        },
+                        {
+                            "state": {
+                                "jar": false
+                            },
+                            "isItem": true,
+                            "details": null
+                        }
+                    ],
                     "nextText": 3
                 },
                 {
@@ -200,7 +231,8 @@
                     "text": "Andar pra sem rumo pra frente!",
                     "nextText": 8,
                     "setState": {
-                        "atento": false
+                        "atento": false,
+                        "item": false
                     }
                 },
                 {
@@ -339,8 +371,7 @@
                                 "force": null,
                                 "intelligence": 1,
                                 "agility": null
-                            },
-                            "goodChoice": null
+                            }
                         }
                     }
                 },

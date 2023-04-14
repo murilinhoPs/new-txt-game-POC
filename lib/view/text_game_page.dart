@@ -67,6 +67,7 @@ class _TextGamePageState extends State<TextGamePage> {
         if (choiceState.contains(optionStates[i])) return;
 
         choiceState.add(optionStates[i]);
+        // if(optionStates[i].item?) inventory.add(optionStates[i].name)
       } else {
         choiceState.removeWhere((state) => state == optionStates[i]);
       }
