@@ -1,6 +1,9 @@
 # txt_game_poc
 
-A new Flutter project.
+Choices game, rpg-text
+
+<img width="349" alt="image" src="https://github.com/murilinhoPs/new-txt-game-POC/assets/36513735/df833965-654c-4fc3-9eda-fbd9aae26cc9">
+
 
 ## Getting Started
 
