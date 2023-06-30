@@ -108,7 +108,12 @@
                 {
                     "index": 2,
                     "text": "???",
-                    "nextText": -1
+                    "nextText": -1,
+                    "remove": {
+                        "nodeName": "Intro_4.3",
+                        "id": 4,
+                        "optionIndex": 2
+                    }
                 },
                 {
                     "index": 3,
