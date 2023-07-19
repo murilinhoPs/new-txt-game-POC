@@ -37,7 +37,7 @@ class JsonDataManager {
         NarradorEndLinesDataModel.fromJson(jsonResponse);
   }
 
-  Future<List> initData() async => [
+  Future<List> get initData async => [
         await loadNarradorEndLines(),
         await loadNarrative(),
       ];

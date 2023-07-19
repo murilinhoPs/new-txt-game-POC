@@ -32,6 +32,7 @@ class _TextGamePageState extends State<TextGamePage> {
   }
 
   void saveGame() {
+    //TODO: save_controller
     bool canSave = narrativeNodes.narrative[currentTextNode].save ?? false;
     if (!canSave) return;
 
@@ -42,24 +43,8 @@ class _TextGamePageState extends State<TextGamePage> {
     PlayerPrefs.saveHistoryInPrefs(narrativeNodes);
   }
 
-  void setCurrentTextNode(OptionNodeDataModel option) {
-    if (option.nextNode == -1) {
-      setState(() {
-        currentTextNode = savedNodeIndex;
-        showStorytellerLines = true;
-      });
-      return;
-    }
-
-    setState(() {
-      currentTextNode = option.nextNode - 1;
-
-      if (option.setState == null) return;
-      setChoiceState(option);
-    });
-  }
-
   void setChoiceState(OptionNodeDataModel option) {
+    //TODO: choice_state_controller
     final optionStates = option.setState!.keys.toList();
     final optionValues = option.setState!.values.toList();
     for (var i = 0; i < option.setState!.length; i++) {
@@ -74,32 +59,56 @@ class _TextGamePageState extends State<TextGamePage> {
     }
   }
 
-  void removeOptionNode(OptionNodeDataModel option) {
-    final remove = option.removeParams;
-    if (remove == null) return;
-
-    final index = remove.id - 1;
-    final nodeOptions = narrativeNodes.narrative[index].options;
-    nodeOptions.removeWhere((option) => option.index == remove.optionIndex);
-    narrativeNodes.narrative[remove.id - 1].options = nodeOptions;
-    PlayerPrefs.saveHistoryInPrefs(narrativeNodes);
-  }
-
-  void onChoiceSubmitted(OptionNodeDataModel option) {
-    saveGame();
-    setCurrentTextNode(option);
-    removeOptionNode(option);
-  }
-
-  void onTryAgainSubmitted() => setState(() => showStorytellerLines = false);
-
   bool requiredStateExists(OptionNodeDataModel option) {
+    //TODO: choice_state_controller
     final requiredStateKeys = option.requiredState?.keys.toList() ?? [];
     // print('contains? ${choiceState.contains(state)}');
     return requiredStateKeys.every(
       (state) => choiceState.contains(state),
     );
   }
+
+  void setCurrentTextNode(OptionNodeDataModel option) {
+    //TODO: choice_nodes_controller
+    if (option.nextNode == -1) {
+      setState(() {
+        currentTextNode = savedNodeIndex;
+        showStorytellerLines = true; //TODO: narrator_lines_controlle
+      });
+      return;
+    }
+
+    setState(() {
+      currentTextNode = option.nextNode - 1;
+
+      if (option.setState == null) return;
+      setChoiceState(option);
+    });
+  }
+
+  void removeOptionNode(OptionNodeDataModel option) {
+    //TODO: choice_nodes_controller
+    final remove = option.removeParams;
+    if (remove == null) return;
+
+    final index = remove.id - 1;
+    final nodeOptions = narrativeNodes.narrative[index].options;
+    //TODO: add updateWhere when update a choice_node instead of deleting it
+    nodeOptions.removeWhere((option) => option.index == remove.optionIndex);
+    narrativeNodes.narrative[remove.id - 1].options = nodeOptions;
+    PlayerPrefs.saveHistoryInPrefs(
+        narrativeNodes); // update current history when loading the json
+  }
+
+  void onChoiceSubmitted(OptionNodeDataModel option) {
+    //TODO: choices_controller
+    saveGame();
+    setCurrentTextNode(option);
+    removeOptionNode(option);
+  }
+
+  void onTryAgainSubmitted() => setState(
+      () => showStorytellerLines = false); //TODO: narrator_lines_controller
 
   @override
   Widget build(BuildContext context) {
@@ -230,7 +239,7 @@ class _TextGamePageState extends State<TextGamePage> {
   Widget narrativeWidget() {
     final randomLine = Random().nextInt(
       narradorLines.lines.length,
-    );
+    ); //TODO: narrator_lines_controlle
 
     return Column(
       children: [
@@ -276,13 +285,14 @@ class _TextGamePageState extends State<TextGamePage> {
                         child: SelectableText(
                           !showStorytellerLines
                               ? narrativeNodes.narrative[currentTextNode].title
-                              : narradorLines.lines[randomLine],
+                              : narradorLines.lines[
+                                  randomLine], //TODO: narrator_lines_controlle
                           style: const TextStyle(
                             fontSize: 22,
                           ),
                         ),
                       ),
-                      !showStorytellerLines
+                      !showStorytellerLines //TODO: narrator_lines_controlle
                           ? choicesWidget()
                           : tryAgainChoices(),
                     ],
@@ -297,7 +307,8 @@ class _TextGamePageState extends State<TextGamePage> {
   }
 
   Widget choicesWidget() {
-    final adventureOptions = narrativeNodes.narrative[currentTextNode].options;
+    final adventureOptions = narrativeNodes
+        .narrative[currentTextNode].options; //TODO: choice_state_controller
 
     return Container(
       padding: const EdgeInsets.only(top: 15.0),
@@ -309,8 +320,10 @@ class _TextGamePageState extends State<TextGamePage> {
         children: adventureOptions.map(
           (option) {
             if (option.requiredState == null || requiredStateExists(option)) {
+              //TODO: choice_state_controller
               return choiceButton(
-                onSubmmit: () => onChoiceSubmitted(option),
+                onSubmmit: () =>
+                    onChoiceSubmitted(option), //TODO: choice_state_controller
                 optionText: option.text,
               );
             }
@@ -368,7 +381,7 @@ class _TextGamePageState extends State<TextGamePage> {
       padding: const EdgeInsets.only(top: 15.0),
       margin: const EdgeInsets.only(top: 15.0),
       child: choiceButton(
-        onSubmmit: onTryAgainSubmitted,
+        onSubmmit: onTryAgainSubmitted, //TODO: narrator_lines_controlle
         optionText: '...',
       ),
     );

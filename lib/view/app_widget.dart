@@ -37,7 +37,7 @@ class _AppWidgetState extends State<AppWidget> {
         primarySwatch: Colors.green,
       ),
       home: FutureBuilder(
-        future: jsonData.initData(),
+        future: jsonData.initData,
         builder: ((context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(child: CircularProgressIndicator());
